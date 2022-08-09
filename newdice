@@ -1,0 +1,54 @@
+#!/bin/bash
+
+#LOG FORMAT
+LOGFILE="$(date +"DND_%Y_%m_%d_%H:%M:%S.log")"
+roll="none"
+
+function logger () {
+
+	echo $roll >> "$LOGFILE"
+
+}
+
+function clear_screen () {
+
+	clear
+
+}
+
+function input () {
+
+	read -p "What kind of dice?" dice
+}
+
+function dice_roll () {
+
+	case $dice in
+		[0-9]|1[0-9]|2[0-9])
+		  roll=$(($RANDOM%$dice))
+		  echo "This is your result: $roll"
+		  ;;
+		*)
+		  echo "I don't know what your talking about"
+		  ;;
+	esac
+}
+
+function main () {
+	read -p "Would you like to roll again: " continue
+	case $continue in
+		y|Y)
+			clear_screen
+			input
+			dice_roll
+			logger
+			main
+			;;
+		*)
+			exit
+			;;
+	esac
+}
+
+main
+
